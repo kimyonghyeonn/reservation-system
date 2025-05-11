@@ -1,0 +1,27 @@
+/* 모바일 화면 중앙 정렬 기본 박스 */
+.center-container {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* 카드 전용 중앙 정렬 */
+.center-card {
+  max-width: 400px;
+  margin: 16px auto;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* Grid 정렬 */
+.center-grid {
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+/* 뷰캘 컴포넌트 고정 정렬 */
+.center-calendar {
+  max-width: 430px;
+  margin: 0 auto;
+}

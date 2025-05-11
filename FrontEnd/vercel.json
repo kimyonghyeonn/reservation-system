@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "# Add Your Info Here => Ex) http://실제 운영하는 ip:port/api/$1"
+    }
+  ]
+}

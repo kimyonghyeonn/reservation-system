@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.wikibook.backend.common.log.UserLog.mapper.UserLogMapper">
+
+    <!--  접속로그  -->
+    <insert id="insertUserLog">
+        INSERT INTO user_log (
+        user_id,
+        action,
+        target,
+        result,
+        http_method,
+        status_code,
+        ip,
+        session_id,
+        created_at
+        ) VALUES (
+        #{userId},
+        #{action},
+        #{target},
+        #{result},
+        #{httpMethod},
+        #{statusCode},
+        #{ip},
+        #{sessionId},
+        CURRENT_TIMESTAMP
+        )
+    </insert>
+
+
+    <!-- 90일 이상 로그 아카이빙 -->
+    <insert id="archiveLogsOlderThan">
+        INSERT INTO user_log_archive (
+        user_id,
+        action,
+        target,
+        result,
+        http_method,
+        status_code,
+        ip,
+        session_id,
+        created_at
+        )
+        SELECT
+        user_id,
+        action,
+        target,
+        result,
+        http_method,
+        status_code,
+        ip,
+        session_id,
+        created_at
+        FROM user_log
+        WHERE created_at &lt; DATE_SUB(NOW(), INTERVAL #{days} DAY)
+    </insert>
+
+    <!-- 원본 로그 삭제 -->
+    <delete id="deleteLogsOlderThan">
+        DELETE FROM user_log
+        WHERE created_at &lt; DATE_SUB(NOW(), INTERVAL #{days} DAY)
+    </delete>
+</mapper>

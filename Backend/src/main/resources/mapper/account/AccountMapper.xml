@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.wikibook.backend.account.mapper.AccountMapper">
+
+    <!-- 회원 정보 조회 -->
+    <select id="getMemberInfo" resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT
+        id,
+        name,
+        login_id AS loginId,
+        login_pw AS loginPw,
+        email,
+        phone,
+        remark,
+        position,
+        manager
+        FROM members
+        WHERE 1=1
+        AND login_id = #{loginId}
+        AND login_pw = #{loginPw}
+    </select>
+    <!--  회원가입  -->
+    <insert id="join" parameterType="kr.co.wikibook.backend.member.model.Members">
+        INSERT INTO members (
+        name,
+        login_id,
+        login_pw,
+        login_pw_salt,
+        email,
+        phone,
+        remark,
+        position,
+        manager,
+        phone_number,
+        info_agree
+        ) VALUES (
+        #{name},
+        #{loginId},
+        #{loginPw},
+        #{loginPwSalt},
+        #{email},
+        #{phone},
+        #{remark},
+        #{position},
+        #{manager},
+        #{phoneNumber},
+        #{infoAgree}
+        )
+    </insert>
+
+    <select id="findMember" resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT
+        id,
+        login_id AS loginId,
+        login_pw AS loginPw,
+        FROM members
+        WHERE 1=1
+        AND login_id = #{loginId}
+        AND login_pw = #{loginPw}
+    </select>
+
+    <select id="isDuplicated" resultType="boolean">
+        SELECT
+        COUNT(*) = 0
+        FROM members
+        WHERE 1=1
+        and login_id = #{loginId}
+    </select>
+
+    <select id="findMemberByLoginId" resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT
+        id,
+        login_id AS loginId,
+        login_pw AS loginPw,
+        reset_pw
+        FROM members
+        WHERE 1=1
+        AND login_id = #{loginId}
+    </select>
+
+    <select id="findMemberById" resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT
+        id,
+        name,
+        email,
+        phone_number as phoneNumber,
+        remark,
+        position,
+        DATE_FORMAT(birthDay, '%Y-%m-%d') AS birthDay,
+        manager,
+        profile_image,
+        reset_pw
+        FROM members
+        WHERE 1=1
+        AND id = #{id}
+    </select>
+
+    <select id="getManagerFlagByMemberId" resultType="int">
+        SELECT manager
+        FROM members
+        WHERE 1=1
+        id = #{memberId}
+    </select>
+
+    <update id="updateMemberProfileImage" >
+        UPDATE members
+        SET
+        profile_image = #{profileImage}
+        WHERE 1=1
+        AND id = #{id}
+    </update>
+
+    <select id="findMemberByLoginIdAndPhone" resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT
+        login_id AS loginId
+        FROM members
+        WHERE 1=1
+        AND name = #{name}
+        AND phone_number = #{phoneNumber}
+    </select>
+
+    <select id="verifyUser" resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT
+        login_id AS loginId,
+        reset_pw,
+        id
+        FROM members
+        WHERE 1=1
+        AND login_id = #{loginId}
+        AND email = #{email}
+        AND name = #{name}
+        AND phone_number = #{phoneNumber}
+    </select>
+
+    <update id="updateMemberPassword" >
+        UPDATE members
+        SET
+        login_pw = #{loginPw},
+        login_pw_salt = #{loginPwSalt}
+        WHERE 1=1
+        AND id = #{id}
+    </update>
+
+    <update id="updateResetPw" >
+        UPDATE members
+        SET
+        reset_pw = true
+        WHERE 1=1
+        AND id = #{id}
+    </update>
+
+    <update id="updatePwWithResetFlag">
+        UPDATE members
+        SET login_pw = #{loginPw},
+        login_pw_salt = #{loginPwSalt},
+        reset_pw = #{resetPw}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

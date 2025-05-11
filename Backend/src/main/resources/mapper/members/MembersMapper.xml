@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.wikibook.backend.member.mapper.MembersMapper">
+
+    <!-- 회원 목록 조회 -->
+    <select id="getAllMembers" resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT id,
+        name,
+        email,
+        phone_number,
+        remark,
+        case
+        when manager = true
+        then '관리자'
+        else '일반사용자'
+        end as is_manager,
+        position,
+        CASE
+        WHEN position = 'BG' THEN '통기타'
+        WHEN position = 'EG' THEN '일렉기타'
+        WHEN position = 'BASS' THEN '베이스'
+        WHEN position = 'DRUM' THEN '드럼'
+        WHEN position = 'VOCAL' THEN '보컬'
+        WHEN position = 'ETC' THEN 'etc(미정)'
+        ELSE '미정'
+        END AS position_nm,
+        profile_image,
+        manager,
+        DATE_FORMAT(created, '%Y-%m-%d') AS create_dt
+        FROM members
+    </select>
+
+    <select id="getMemberById"  parameterType="int"  resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT *
+        FROM members
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateMember" >
+        UPDATE members
+        SET
+        name = #{name},
+        email = #{email},
+        phone_number = #{phoneNumber},
+        remark = #{remark},
+        position = #{position},
+        manager = #{manager},
+        birthDay = #{birthDay}
+        WHERE 1=1
+        AND id = #{id}
+    </update>
+
+    <delete id="deleteMember" >
+        delete
+        from members
+        WHERE 1=1
+        AND id = #{id}
+    </delete>
+
+</mapper>

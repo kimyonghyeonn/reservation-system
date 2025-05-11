@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.wikibook.backend.block.mapper.BlockMapper">
+
+    <!-- 회원 정보 조회 -->
+    <select id="getMemberInfo" resultType="kr.co.wikibook.backend.member.model.Members">
+        SELECT
+        id,
+        name,
+        login_id AS loginId,
+        login_pw AS loginPw,
+        email,
+        phone,
+        remark,
+        position,
+        manager
+        FROM members
+        WHERE 1=1
+        AND login_id = #{loginId}
+        AND login_pw = #{loginPw}
+    </select>
+    <!--  회원가입  -->
+    <insert id="addBlock" parameterType="String">
+        INSERT INTO blocks (
+        token
+        ) VALUES (
+        #{token}
+        )
+    </insert>
+
+    <select id="hasBlock" parameterType="String" resultType="boolean">
+        SELECT EXISTS (
+        SELECT 1 FROM blocks WHERE token = #{token}
+        )
+    </select>
+
+
+
+
+</mapper>
